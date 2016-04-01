@@ -86,5 +86,6 @@ config['webapp2_extras.sessions'] = {
 
 app = webapp2.WSGIApplication([
 	('/signin', SignIn),
+	('/oauthcallback', OAuthCallback),
     ('/', MainPage)
 ],config=config, debug=True)

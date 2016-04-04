@@ -43,6 +43,11 @@ def OAuthCallback(request, state, provider, redirect_uri):
 		accessFunc = ProviderAccessMap.get(provider)
 
 		#call the function, getting our user email in the response
-		userEmail = accessFunc(redirect_uri,request.get('code'))
+		results = accessFunc(redirect_uri,request.get('code'))
 
-		return {"error" : False, "errorText" : '', "userEmail" : userEmail}
+		return {"error" : False, 
+				"errorText" : '', 
+				"userEmail" : results['userEmail'],
+				"accessToken" : results['accessToken'],
+				"refreshToken" : results['refreshToken']
+				}

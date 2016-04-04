@@ -92,7 +92,7 @@ class OAuthCallback(BaseHandler):
             logging.info(result['accessToken'])
             logging.info(result['refreshToken'])
             self.response.write('<html><body>')
-            self.response.write('Succes!')
+            self.response.write('Success!')
             self.response.write('<h3>Hello </h3>' + result['userEmail'])
             self.response.write('</body></html>')
         

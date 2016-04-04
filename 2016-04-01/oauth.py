@@ -25,7 +25,7 @@ def SignIn(provider, redirect_uri, state):
 #--------------------------------------------------------------------------
 #Handle a callback to our applicaiton after the Grant Authorization step
 #--------------------------------------------------------------------------
-def OAuthCallback(request, state):
+def OAuthCallback(request, state, provider, redirect_uri):
 	#First, check for a mismatch between the State tokens and return
 	#an error if found
 	if (request.get('state') != state):
@@ -38,8 +38,11 @@ def OAuthCallback(request, state):
 		return {"error" : True, "errorText" : error}
 
 	#No error, so continue with exchange of Authorization Code for Access and Refresh Token
-	else:
-		#Extract the provider from the State token (we used the word 'Provider' as a seperator)
-		base, provider = state.split('Provider')
-		
-		return {"error" : False, "errorText" : ''}
+	else:		
+		#Lookup the correct function in the tuple
+		accessFunc = ProviderAccessMap.get(provider)
+
+		#call the function, getting our user email in the response
+		userEmail = accessFunc(redirect_uri,request.get('code'))
+
+		return {"error" : False, "errorText" : '', "userEmail" : userEmail}

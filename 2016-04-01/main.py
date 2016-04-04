@@ -74,8 +74,11 @@ class SignIn(BaseHandler):
 #--------------------------------------------------------------------------
 class OAuthCallback(BaseHandler):
     def get(self):
+        #Extract the provider from the State token (we used the word 'Provider' as a seperator)
+        base, provider = self.session.get('state').split('Provider')
+
         #Just send the relevant information to the OAuth library
-        result = oauth.OAuthCallback(self.request, self.session.get('state'))
+        result = oauth.OAuthCallback(self.request, self.session.get('state'), provider, redirect_uri)
         
         #Was there an error (such as denied access) during grant request?
         if (result['error'] == True):            
